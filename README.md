@@ -2,6 +2,11 @@
 <h1 align="center">Project website <a href="http://calculation-of-categories.herokuapp.com/" target="_blank">Calculation of production categories</a> 
 <h3 align="center">Calculation of production categories for explosion and fire hazard.</h3>
 
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)
+![Heroku](https://img.shields.io/badge/heroku-%23430098.svg?style=for-the-badge&logo=heroku&logoColor=white)
+
+
 ## Initial download
 
 ```shell script
