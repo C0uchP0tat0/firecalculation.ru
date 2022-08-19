@@ -1,0 +1,44 @@
+
+
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link href="{% static "bootstrap.css" %}" rel="stylesheet">
+    <title>Определения категорий помещений</title>
+</head>
+<body class="container">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+            <th scope="col">Материал</th>
+            <th scope="col">Низшая теплота сгорания</th>
+            </tr>
+        </thead>
+    
+    {% for load in fireload %}
+                <div >
+                    <div >
+                        <tbody>
+                            <tr class="table-active">
+                            <th scope="row">{{ load.material }}</th>
+                            <td>{{ load.heat }} &nbsp; &nbsp; &nbsp; &nbsp; МДж/кг</td>
+                            <td><a type="button" class="badge bg-success" href="{{ load.id }}/update/">Изменить</a></td>
+                            <td><a type="button" class="badge bg-danger" href="{{ load.id }}/delete/">Удалить</a></td>
+                            </tr>
+                        </tbody>                 
+                    </div>
+                </div>
+    {% endfor %}
+    <div class="d-grid gap-2">
+        <a type="button" class="btn btn-outline-warning" style="max-width: 7rem;" href="{% url 'rkp:index' %}">На главную</a>
+    </div>
+    <div>
+        <a type="button"
+               class="btn btn-outline-light"
+               style="max-width: 60rem;"
+               href="{% url 'rkp:fire_load_create' %}">Добавить пожарную нагрузку</a>
+    </div>
+</body>
+</html>

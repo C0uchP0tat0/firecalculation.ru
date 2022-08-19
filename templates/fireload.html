@@ -1,0 +1,28 @@
+
+
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link href="{% static "bootstrap.css" %}" rel="stylesheet">
+    <title>Определения категорий помещений</title>
+</head>
+<body class="container">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+    <table>
+        {{ quantityform }} 
+        {{ quantityform.weights }}
+    </table>
+    <input type="submit" class="btn btn-outline-success" value="Сохранить" >
+    </form>
+    <div class="d-grid gap-2">
+        <a type="button" class="btn btn-outline-warning" style="max-width: 7rem;" href="{% url 'rkp:index' %}">На главную</a>
+    </div>
+    <a type="button"
+               class="btn btn-outline-light"
+               style="max-width: 60rem;"
+               href="{% url 'rkp:fire_load_create' %}">Добавить пожарную нагрузку</a>
+</body>
+</html>

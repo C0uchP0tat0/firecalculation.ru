@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link href="{% static "bootstrap.css" %}" rel="stylesheet">
+        <title>Расчёт категорий помещений</title>
+    </head>
+    <body class="container">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% if user.is_authenticated %}
+            <a type="button"
+               class="btn btn-outline-success"
+               style="max-width: 60rem;"
+               href="{% url 'rkp:object_create' %}">Создайте новый объект для расчёта</a>
+            <a type="button"
+               class="btn btn-outline-light"
+               style="max-width: 60rem;"
+               href="{% url 'rkp:fire_load_create' %}">Добавить пожарную нагрузку</a>
+            <a type="button"
+               class="btn btn-outline-info"
+               style="max-width: 60rem;"
+               href="{% url 'rkp:fire_load_list' %}">Моя пожарная нагрузка</a>
+        {% else %}
+            <p class="text-warning">
+                Для создание, изменения, удаления объекта необходимо авторизироваться!
+            </p>
+        {% endif %}
+        {% if user.is_authenticated %}
+            <p class="text-muted">
+                Вы вошли как {{ user }}
+            </p>
+            <a type="button"
+               class="btn btn-dark"
+               style="max-width: 60rem;"
+               href="{% url 'rkp:logout' %}">Выйти</a>
+        {% else %}
+            <a type="button"
+               class="btn btn-primary"
+               style="max-width: 60rem;"
+               href="{% url 'rkp:login' %}">Войти</a>
+            <a type="button"
+               class="btn btn-primary"
+               style="max-width: 60rem;"
+               href="{% url 'accounts:signup' %}">Зарегистрироваться</a>
+        {% endif %}
+        {% if fireobjec.count > 0 %}
+            <h2>Список объектов</h2>
+            {% for obj in fireobjec %}
+                <div >
+                    <div >
+                        <div class="card text-white bg-primary mb-3" style="max-width: 60rem;">
+                            <div class="card-header">Карта объекта</div>
+                            <div class="card-body">
+                                <h4 class="card-title">Объект - " {{ obj.title }} "</h4>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Длина</th>
+                                            <th scope="col">Ширина</th>
+                                            <th scope="col">Высота</th>
+                                            <th scope="col">Площадь</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="table-info">
+                                            <td>{{ obj.length }} м</td>
+                                            <td>{{ obj.width }} м</td>
+                                            <td>{{ obj.height }} м</td>
+                                            <td>{{ obj.result }} кв.м</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Материал</th>
+                                            <th scope="col",>Низшая теплота сгорания</th>
+                                            <th scope="col">Количество</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                                {% for q in quantity %}
+                                    {% if obj == q.fire_object %}
+                                        <table class="table table-hover">
+                                            <tbody>
+                                                <tr class="table-secondary">
+                                                    <td align="left">{{ q.fire_load.material }}</td>
+                                                    <td align="center">{{ q.fire_load.heat }} МДж/кг</td>
+                                                    <td align="center">{{ q.weight }} кг</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    {% endif %}
+                                {% endfor %}
+                                <p class="card-text">
+                                    Удельная пожарная нагрузка - {{ obj.q_sum }} МДж
+                                </p>
+                                <h3>
+                                    <p class="card-text">
+                                        Категория производства - {{ obj.production_category }}
+                                    </p>
+                                </h3>
+                                {% if user.is_authenticated %}
+                                    <div class="modal-footer">
+                                        <a type="button"
+                                           class="btn btn-outline-success"
+                                           href="{{ obj.id }}/update/">Изменить</a>
+                                        <a type="button"
+                                           class="btn btn-outline-danger"
+                                           data-bs-dismiss="modal"
+                                           href="{{ obj.id }}/delete/">Удалить</a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <!-- <h3>Название объекта - " {{obj.title}} "</h3>
+              <p >длина | ширина | высота | площадь 
+              <p >{{obj.length}} | {{obj.width}} | {{obj.height}} | {{obj.result}}  </p>
+              <div >
+                <div >
+                    <h4>Пожарная нагрузка</h4>
+                    {% for q in quantity %}
+                    {% if obj == q.fire_object %}
+                      <p >{{q.fire_load.material}} - {{q.fire_load.heat}} МДж/кг | Количество {{q.weight}} кг</p>
+                      {% endif %}
+                    {% endfor %}
+                <p> Удельная пожарная нагрузка - {{obj.q_sum}} МДж </p>
+                <p> Категория производства {{obj.production_category}}</p>
+                <td><a href="{{obj.id}}/update/">Изменить</a> | <a href="{{obj.id}}/delete/">Удалить</a>
+                </div>
+              </div> -->
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-warning">
+                У Вас пока нет ни одного расчёта.
+                Здесь будут отображаться Ваши расчёты!
+            </p>
+        {% endif %}
+    </body>
+</html>

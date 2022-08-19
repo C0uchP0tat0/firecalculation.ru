@@ -1,0 +1,1 @@
+web: gunicorn calculation_of_categories.wsgi
