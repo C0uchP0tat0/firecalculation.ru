@@ -4,7 +4,7 @@
 ![Heroku](https://img.shields.io/badge/heroku-%23430098.svg?style=for-the-badge&logo=heroku&logoColor=white)
 
 
-<h1 align="center">Project website <a href="http://calculation-of-categories.herokuapp.com/" target="_blank">Calculation of production categories</a> 
+<h1 align="center">Project website <a href="http://calculation-of-categories.herokuapp.com/" target="_blank">calculation of production categories</a> 
 <h3 align="center">Calculation of production categories for explosion and fire hazard.</h3>
 
 ## Initial download
@@ -19,12 +19,3 @@ python manage.py migrate
 
 ### `python manage.py runserver`
 Starts the dev-server
-
-```html
-    <style>
-    body {
-        background: #c7b39b ;
-        color: #fff;
-    }
-    </style>
-```
