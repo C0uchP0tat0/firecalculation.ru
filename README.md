@@ -20,9 +20,11 @@ python manage.py migrate
 ### `python manage.py runserver`
 Starts the dev-server
 
-```css
+```html
+    <style>
     body {
         background: #c7b39b ;
         color: #fff;
     }
+    </style>
 ```
