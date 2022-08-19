@@ -21,10 +21,8 @@ python manage.py migrate
 Starts the dev-server
 
 ```css
-    <style>
     body {
         background: #c7b39b ;
         color: #fff;
     }
-    </style>
 ```
