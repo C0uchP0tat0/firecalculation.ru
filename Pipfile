@@ -8,6 +8,8 @@ djangorestframework = "*"
 gunicorn = "*"
 whitenoise = "*"
 psycopg2 = "*"
+django-environ = "*"
+flake8 = "*"
 
 [dev-packages]
 

@@ -11,7 +11,7 @@ class FireLoadtAdmin(admin.ModelAdmin):
 
 
 class QuantityAdmin(admin.ModelAdmin):
-    list_display = ['fire_object', 'fire_load', 'weight', 'material_Q' ]
+    list_display = ['fire_object', 'fire_load', 'weight', 'material_Q']
 
 
 admin.site.register(FireObject, FireObjectAdmin)

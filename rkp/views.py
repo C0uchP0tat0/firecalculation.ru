@@ -5,10 +5,10 @@ from .forms import FireObjectForm, QuantityForm, UserForm, FireloadCreateForm
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.dispatch import receiver
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save
 from django.forms import modelformset_factory
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 
 from .serializers import FireObjectSerializer
 
@@ -16,13 +16,16 @@ from .serializers import FireObjectSerializer
 """
 РАБОТА С ОБЪЕКТАМИ, РАСЧЁТ КАТЕГОРИЙ ПРОИЗВОДСТВ
 """
+
+
 def get_user(request):
-    
+
     user = request.user
     return user
 
+
 def index(request):
-    
+
     user = get_user(request=request)
     try:
         fireobjec = FireObject.objects.filter(user=user).order_by('-id')
@@ -35,13 +38,14 @@ def index(request):
                                         'user': user,
                                         })
 
+
 @login_required(login_url='/login/')
 def update(request, pk):
-    
+
     try:
         fire_object = get_object_or_404(FireObject, pk=pk)
         obj = Quantity.objects.filter(fire_object=fire_object)
-        initial=[
+        initial = [
             {'fire_object': fire_object},
             {'fire_object': fire_object},
             {'fire_object': fire_object},
@@ -53,13 +57,15 @@ def update(request, pk):
     QuantityFormSet = modelformset_factory(
         Quantity,
         form=QuantityForm,
-        fields = [ 'fire_load', 'weight', 'fire_object'],
+        fields=['fire_load', 'weight', 'fire_object'],
         extra=0,
     )
-        
+
     if request.method == "POST":
         objectform = FireObjectForm(request.POST, instance=fire_object)
-        quantityform = QuantityFormSet(request.POST, initial=initial, form_kwargs={'user': request.user}) #instance=Quantity.objects.filter(fire_object=fire_object))
+        quantityform = QuantityFormSet(request.POST,
+                                       initial=initial,
+                                       form_kwargs={'user': request.user})
         if objectform.is_valid() and quantityform.is_valid():
             objectform.save()
             quantityform.save()
@@ -69,16 +75,20 @@ def update(request, pk):
             messages.error(request, 'Error saving form')
     else:
         objectform = FireObjectForm(instance=fire_object)
-        quantityform = QuantityFormSet(queryset=obj, initial=initial, form_kwargs={'user': request.user})
+        quantityform = QuantityFormSet(
+            queryset=obj,
+            initial=initial,
+            form_kwargs={'user': request.user})
         quantityform.extra += len(initial)
         return render(request, 'update.html', {
             'objectform': objectform,
             'quantityform': quantityform,
             })
 
-@login_required(login_url='/login/')        
+
+@login_required(login_url='/login/')
 def delete(request, pk):
-    
+
     try:
         fire_object = get_object_or_404(FireObject, pk=pk)
         fire_object.delete()
@@ -86,11 +96,12 @@ def delete(request, pk):
     except FireObject.DoesNotExist:
         messages.error(request, 'FireObjec not found')
 
-@login_required(login_url='/login/')        
+
+@login_required(login_url='/login/')
 def object_create(request):
-     
+
     if request.method == "POST":
-        objectform = FireObjectForm(request.POST)         
+        objectform = FireObjectForm(request.POST)
         if objectform.is_valid():
             objectform.save()
             messages.success(request, ('Объект был успешно добавлен!'))
@@ -100,47 +111,60 @@ def object_create(request):
                 width=objectform.cleaned_data['width'],
                 height=objectform.cleaned_data['height'],
                 user=request.user, ).order_by('-id')[0]
-            return redirect("rkp:fireload_add", pk = obj.id)
+            return redirect("rkp:fireload_add", pk=obj.id)
         else:
             messages.error(request, 'Error saving form')
     else:
-        initial={'user': request.user}
+        initial = {'user': request.user}
         objectform = FireObjectForm(initial=initial)
 
     return render(request, 'object_create.html', {
         'objectform': objectform,
         })
 
+
 @receiver(post_save, sender=FireObject)
 def get_id(sender, instance, **kwargs):
     return instance
-    
-@login_required(login_url='/login/')    
+
+
+@login_required(login_url='/login/')
 def fireload_add(request, pk):
-    
+
     obj = FireObject.objects.get(id=pk)
-    
+
     QuantityFormSet = modelformset_factory(
         Quantity,
         form=QuantityForm,
-        fields = [ 'fire_load', 'weight', 'fire_object'],
+        fields=['fire_load', 'weight', 'fire_object'],
         extra=0,
     )
     if request.method == "POST":
-        quantityform = QuantityFormSet(request.POST, form_kwargs={'user': request.user})
-        
+        quantityform = QuantityFormSet(
+            request.POST,
+            form_kwargs={'user': request.user})
+
         if quantityform.is_valid():
             quantityform.save()
-            messages.success(request, ('Пожарная нагрузка была успешно добавлена!'))
+            messages.success(
+                request,
+                ('Пожарная нагрузка была успешно добавлена!'))
             return redirect("/")
-           
+
         else:
             messages.error(request, 'Error saving form')
     else:
         try:
-            initial=[{'fire_object': obj}, {'fire_object': obj}, {'fire_object': obj}, {'fire_object': obj}]
-            quantityform = QuantityFormSet(queryset=Quantity.objects.filter(fire_object=obj), 
-                                        initial=initial, form_kwargs={'user': request.user})
+            initial = [
+                {'fire_object': obj},
+                {'fire_object': obj},
+                {'fire_object': obj},
+                {'fire_object': obj}
+                ]
+            quantityform = QuantityFormSet(queryset=Quantity.objects.filter(
+                fire_object=obj),
+                                           initial=initial,
+                                           form_kwargs={'user': request.user})
             quantityform.extra += len(initial)
         except:
             return redirect("/")
@@ -149,11 +173,14 @@ def fireload_add(request, pk):
         'quantityform': quantityform,
         })
 
+
 """
 РЕГИСТРАЦИЯ, АУТЕНТИФИКАЦИЯ
 """
+
+
 def login_view(request):
-    
+
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
@@ -171,8 +198,9 @@ def login_view(request):
         userform = UserForm()
         return render(request, "login.html", {"form": userform})
 
+
 def logout_view(request):
-    
+
     logout(request)
     return redirect("/")
 
@@ -180,20 +208,23 @@ def logout_view(request):
 """
 РАБОТА С ОБЪЕКТАМИ ПОЖАРНОЙ НАГРУЗКИ
 """
+
+
 @login_required(login_url='/login/')
 def fire_load_list(request):
-    
+
     user = get_user(request=request)
     fireload = FireLoad.objects.filter(user=user)
     return render(request, 'fire_load_list.html', {
                                         "fireload": fireload,
                                         })
 
+
 @login_required(login_url='/login/')
 def fire_load_create(request):
-    
+
     if request.method == "POST":
-        fireloadcreateform = FireloadCreateForm(request.POST)         
+        fireloadcreateform = FireloadCreateForm(request.POST)
         if fireloadcreateform.is_valid():
             fireloadcreateform.save()
             messages.success(request, ('Объект был успешно добавлен!'))
@@ -201,21 +232,24 @@ def fire_load_create(request):
         else:
             messages.error(request, 'Error saving form')
     else:
-        initial={'user': request.user}
+        initial = {'user': request.user}
         fireloadcreateform = FireloadCreateForm(initial=initial)
 
     return render(request, 'fire_load_create.html', {
         'fireloadcreateform': fireloadcreateform,
         })
-    
-@login_required(login_url='/login/')  
+
+
+@login_required(login_url='/login/')
 def fire_load_update(request, pk):
     try:
         fire_load = get_object_or_404(FireLoad, pk=pk)
     except:
         return redirect("rkp:fire_load_list")
     if request.method == "POST":
-        fireloadcreateform = FireloadCreateForm(request.POST, instance=fire_load)         
+        fireloadcreateform = FireloadCreateForm(
+            request.POST,
+            instance=fire_load)
         if fireloadcreateform.is_valid():
             fireloadcreateform.save()
             messages.success(request, ('Объект был успешно изменён!'))
@@ -223,14 +257,17 @@ def fire_load_update(request, pk):
         else:
             messages.error(request, 'Error saving form')
     else:
-        initial={'user': request.user}
-        fireloadcreateform = FireloadCreateForm(instance=fire_load, initial=initial)
+        initial = {'user': request.user}
+        fireloadcreateform = FireloadCreateForm(
+            instance=fire_load,
+            initial=initial)
 
     return render(request, 'fire_load_update.html', {
         'fireloadcreateform': fireloadcreateform,
         })
 
-@login_required(login_url='/login/')        
+
+@login_required(login_url='/login/')
 def fire_load_delete(request, pk):
     try:
         fire_load = get_object_or_404(FireLoad, pk=pk)
@@ -238,8 +275,8 @@ def fire_load_delete(request, pk):
         return redirect("rkp:fire_load_list")
     except FireObject.DoesNotExist:
         messages.error(request, 'FireLoad not found')
-        
-    
+
+
 class FireObjectView(ModelViewSet):
     queryset = FireObject.objects.all()
     serializer_class = FireObjectSerializer
