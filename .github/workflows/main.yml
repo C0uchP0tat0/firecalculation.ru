@@ -5,7 +5,7 @@ on:
       - develop
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: instrumentisto/rsync-ssh
     
     steps:
  
