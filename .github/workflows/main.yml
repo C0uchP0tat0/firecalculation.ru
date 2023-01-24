@@ -9,29 +9,35 @@ jobs:
     
     steps:
  
-      - name: Install SSH Key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          known_hosts: unnecessary
+      #- name: Install SSH Key
+      #  uses: shimataro/ssh-key-action@v2
+      # with:
+      #    key: ${{ secrets.SSH_PRIVATE_KEY }}
+      #    known_hosts: unnecessary
 
       - name: Adding Known Hosts
-        run: ssh-keyscan -p ${{ secrets.SSH_PORT}} -H ${{ secrets.SSH_HOST }}  >> ~/.ssh/known_hosts
-
+        # run: ssh-keyscan -p ${{ secrets.SSH_PORT}} -H ${{ secrets.SSH_HOST }}  >> ~/.ssh/known_hosts
+        run: |
+            - mkdir -p ~/.ssh
+            - chmod 700 ~/.ssh
+            - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+            - echo "$secrets.SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+            - chmod 600 ~/.ssh/id_rsa
+ 
       - name: Deploy with rsync
-        run: rsync -za "ssh -p ${{ secrets.SSH_PORT }}" (pwd)/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/opt/django/calculation-of-categories --exclude=.git*
-
+      #   run: rsync -za "ssh -p ${{ secrets.SSH_PORT }}" (pwd)/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/opt/django/calculation-of-categories --exclude=.git*
+        run: rsync -za $(pwd)/ $(echo $secrets.SSH_HOST):$/opt/django/calculation-of-categories --exclude=.git*
       - name: Restart Server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            ssh -t ${SSH_HOST} << EOF
-            cd /opt/django/calculation-of-categories
-            pipenv install --deploy
-            pipenv run python manage.py migrate
-            pipenv run python manage.py collectstatic --noinput
-            systemctl restart $rkp.target
+        # uses: appleboy/ssh-action@master
+        # with:
+        #   host: ${{ secrets.SSH_HOST }}
+        #   username: ${{ secrets.SSH_USER }}
+        #   key: ${{ secrets.SSH_PRIVATE_KEY }}
+        # port: ${{ secrets.SSH_PORT }}
+        run: |
+          ssh -t ${SSH_HOST} << EOF
+          cd /opt/django/calculation-of-categories
+          pipenv install --deploy
+          pipenv run python manage.py migrate
+          pipenv run python manage.py collectstatic --noinput
+          systemctl restart $rkp.target
