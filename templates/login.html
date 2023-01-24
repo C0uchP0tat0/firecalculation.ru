@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+{% extends "base_generic.html" %}
 {% load static %}
+{% block content %}
 <html>
     <head>
         <meta charset="utf-8" />
@@ -23,3 +25,4 @@
         {% if alert_flag %}<script>alert("Учётные данные не верны, повторите попытку.")</script>{% endif %}
     </body>
 </html>
+{% endblock %}

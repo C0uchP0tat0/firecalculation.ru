@@ -1,10 +1,12 @@
 <!DOCTYPE html>
+{% extends "base_generic.html" %}
 {% load static %}
+{% block content %}
 <html>
     <head>
         <meta charset="utf-8" />
         <link href="{% static "bootstrap.css" %}" rel="stylesheet">
-        <title>Расчёт категорий помещений</title>
+        <h2>Расчёт категорий помещений</h2>
     </head>
     <body class="container">
         {% if messages %}
@@ -120,22 +122,6 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <!-- <h3>Название объекта - " {{obj.title}} "</h3>
-              <p >длина | ширина | высота | площадь 
-              <p >{{obj.length}} | {{obj.width}} | {{obj.height}} | {{obj.result}}  </p>
-              <div >
-                <div >
-                    <h4>Пожарная нагрузка</h4>
-                    {% for q in quantity %}
-                    {% if obj == q.fire_object %}
-                      <p >{{q.fire_load.material}} - {{q.fire_load.heat}} МДж/кг | Количество {{q.weight}} кг</p>
-                      {% endif %}
-                    {% endfor %}
-                <p> Удельная пожарная нагрузка - {{obj.q_sum}} МДж </p>
-                <p> Категория производства {{obj.production_category}}</p>
-                <td><a href="{{obj.id}}/update/">Изменить</a> | <a href="{{obj.id}}/delete/">Удалить</a>
-                </div>
-              </div> -->
                     </div>
                 </div>
             {% endfor %}
@@ -147,3 +133,4 @@
         {% endif %}
     </body>
 </html>
+{% endblock %}
