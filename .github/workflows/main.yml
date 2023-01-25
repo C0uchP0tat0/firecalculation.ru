@@ -24,7 +24,7 @@ jobs:
             - echo "$secrets.SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
             - chmod 600 ~/.ssh/id_rsa
  
-      - name: Deploy with rsync
+      - name: Deploy
       #   run: rsync -za "ssh -p ${{ secrets.SSH_PORT }}" (pwd)/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/opt/django/calculation-of-categories --exclude=.git*
         run: rsync -za $(pwd)/ $(echo $secrets.SSH_HOST):$/opt/django/calculation-of-categories --exclude=.git*
       - name: Restart Server
