@@ -23,11 +23,12 @@
       {% block sidebar %}
       <ul class="sidebar-nav">
           <li><a href="{% url 'rkp:index' %}">Home</a></li>
+          <li><a href="">About</a></li>
           {% if user.is_authenticated %}
             <li><a href="{% url 'rkp:logout' %}">Выйти</a></li>
           {% else %}
             <li><a href="{% url 'rkp:login' %}">Войти</a></li>
-            <li><a href="{% url 'accounts:signup' %}">Зарегистрироваться</a>
+            <li><a href="{% url 'accounts:signup' %}">Зарегистрироваться</a></li>
           {% endif %}
       </ul>
      {% endblock %}
