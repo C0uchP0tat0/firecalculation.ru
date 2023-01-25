@@ -16,6 +16,7 @@ jobs:
          known_hosts: unnecessary
 
       - name: Adding Known Hosts
+      - uses: shimataro/ssh-key-action@v2
 #         run: ssh-keyscan -p ${{ secrets.SSH_PORT}} -H ${{ secrets.SSH_HOST }}  >> ~/.ssh/known_hosts
         with:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
