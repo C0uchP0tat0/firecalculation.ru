@@ -34,7 +34,7 @@
                 Для создание, изменения, удаления объекта необходимо авторизироваться!
             </p>
         {% endif %}
-        {% if user.is_authenticated %}
+        <!-- {% if user.is_authenticated %}
             <p class="text-muted">
                 Вы вошли как {{ user }}
             </p>
@@ -51,7 +51,7 @@
                class="btn btn-primary"
                style="max-width: 60rem;"
                href="{% url 'accounts:signup' %}">Зарегистрироваться</a>
-        {% endif %}
+        {% endif %} -->
         {% if fireobjec.count > 0 %}
             <h2>Список объектов</h2>
             {% for obj in fireobjec %}

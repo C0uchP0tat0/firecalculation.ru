@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'social_django',
     'rkp',
     'accounts',
 ]
@@ -98,6 +99,16 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY", default="!!! SOCIAL_AUTH_GOOGLE_OAUTH2_KEY !!!")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET", default="!!! SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET !!!")
+
+LOGIN_REDIRECT_URL = '/'
 
 # -----------------------------------------------------------------------------------------------
 # - INTERNATIONALIZATION ------------------------------------------------------------------------

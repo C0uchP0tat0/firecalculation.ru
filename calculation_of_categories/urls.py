@@ -5,6 +5,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('social_django.urls', namespace='social')),
     path('', include('accounts.urls')),
     path('', include('rkp.urls', namespace='rkp')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
