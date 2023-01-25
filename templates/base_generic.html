@@ -27,59 +27,26 @@
             <ul class="navbar-nav me-auto">
               <li class="nav-item">
                 <a type="button" class="btn btn-outline-info" style="margin-right: 5px" href="{% url 'rkp:index' %}">Home</a>
-                <!-- <a class="nav-link active" href="{% url 'rkp:index' %}">
-                  <p class="text-muted">
-                    Home
-                  </p>
-                  <span class="visually-hidden">(current)</span>
-                </a> -->
               </li>
               <li class="nav-item">
                 <a type="button" class="btn btn-outline-info" style="margin-right: 5px" href="#">About</a>
-                <!-- <a class="nav-link active" href="">
-                  <p class="text-muted">
-                    About
-                  </p>
-                  <span class="visually-hidden">(current)</span>
-                </a> -->
               </li>
               {% if user.is_authenticated %}
               <li class="nav-item">
                 <a type="button" class="btn btn-outline-warning" style="margin-right: 5px" href="{% url 'rkp:logout' %}">Выйти</a>
-                <!-- <a class="nav-link active" href="{% url 'rkp:logout' %}">
-                  <p class="text-muted">
-                    Выйти
-                  </p>
-                  <span class="visually-hidden">(current)</span>
-                </a> -->
               </li>
               {% else %}
               <li class="nav-item">
                 <a type="button" class="btn btn-outline-success" style="margin-right: 5px" href="{% url 'rkp:login' %}">Войти</a>
-                <!-- <a class="nav-link active" href="{% url 'rkp:login' %}">
-                  <p class="text-muted">
-                    Войти
-                  </p>
-                  <span class="visually-hidden">(current)</span>
-                </a> -->
               </li>
               <li class="nav-item">
-                <a type="button" class="btn btn-outline-warning" style="margin-right: 5px" href="{% url 'social:begin' 'google-oauth2' %}">Войти с Google</a>
-                <!-- <a class="nav-link active" href="{% url 'social:begin' 'google-oauth2' %}">
-                  <p class="text-success">
-                    Войти с Google
-                  </p>
-                  <span class="visually-hidden">(current)</span>
-                </a> -->
+                <a type="button" class="btn btn-outline-warning" style="margin-right: 5px" href="{% url 'social:begin' 'google-oauth2' %}">
+                  <img class="google-icon" width="20" height="20" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
+                     Войти с Google</a>
               </li>
               <li class="nav-item">
                 <a type="button" class="btn btn-outline-info" style="margin-right: 5px" href="{% url 'accounts:signup' %}">Зарегистрироваться</a>
-                <!-- <a class="nav-link active" href="{% url 'accounts:signup' %}">
-                  <p class="text-muted">
-                    Зарегистрироваться
-                  </p>
-                  <span class="visually-hidden">(current)</span>
-                </a> -->
+
               </li>
               {% endif %}
             </ul>
@@ -92,8 +59,6 @@
       <!-- <div class="col-sm-10 "> -->
       {% block content %}{% endblock %}
       </div>
-    </div>
-
   </div>
 </body>
 </html>
