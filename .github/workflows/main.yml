@@ -16,13 +16,14 @@ jobs:
          known_hosts: unnecessary
 
       - name: Adding Known Hosts
-        run: ssh-keyscan -p ${{ secrets.SSH_PORT}} -H ${{ secrets.SSH_HOST }}  >> ~/.ssh/known_hosts
-#         run: |
-#             - mkdir -p ~/.ssh
-#             - chmod 700 ~/.ssh
-#             - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-#             - echo "$secrets.SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-#             - chmod 600 ~/.ssh/id_rsa
+#         run: ssh-keyscan -p ${{ secrets.SSH_PORT}} -H ${{ secrets.SSH_HOST }}  >> ~/.ssh/known_hosts
+        with:
+          script: |
+              - mkdir -p ~/.ssh
+              - chmod 700 ~/.ssh
+              - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+              - echo "$secrets.SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+              - chmod 600 ~/.ssh/id_rsa
  
       - name: Deploy
         run: rsync -za "ssh -p ${{ secrets.SSH_PORT }}" (pwd)/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/opt/django/calculation-of-categories --exclude=.git*
