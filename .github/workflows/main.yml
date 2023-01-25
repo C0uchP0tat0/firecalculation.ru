@@ -1,7 +1,7 @@
 name: Django Deploy CD
 on:
   push:
-    branches: develop
+    branches: master
 jobs:
   deploy:
     runs-on: ubuntu-20.04
