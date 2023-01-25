@@ -18,6 +18,7 @@ jobs:
       - name: Adding Known Hosts
 #         run: ssh-keyscan -p ${{ secrets.SSH_PORT}} -H ${{ secrets.SSH_HOST }}  >> ~/.ssh/known_hosts
         with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
               - mkdir -p ~/.ssh
               - chmod 700 ~/.ssh
