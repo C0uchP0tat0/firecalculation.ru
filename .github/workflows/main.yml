@@ -1,35 +1,24 @@
-name: deploy
+name: Django Deploy CD
 on:
   push:
-    branches:
-      - develop
+    branches: develop
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
-      - name: Install SSH Key
-        uses: shimataro/ssh-key-action@v2
-        with:
-         key: ${{ secrets.SSH_PRIVATE_KEY }}
-         known_hosts: unnecessary
-
-      - name: Adding Known Hosts
-        run: ssh-keyscan -H ${{ secrets.SSH_HOST }}  >> ~/.ssh/known_hosts
- 
-      - name: Deploy with rsync
-        run: rsync -za "ssh -p ${{ secrets.SSH_PORT }}" (pwd)/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/opt/django/calculation-of-categories --exclude=.git*
-
-      - name: Restart Server
+      - name: Deploy to server
+      # don't run locally
+#         if: ${{ !env.ACT }}
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
+          host: ${{ secrets.LIVE_SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          password: ${{ secrets.SERVER_USER_PASSWORD }}
+          port: ${{ secrets.DEPLOY_PORT }}
           script: |
-            ssh -t ${SSH_HOST} << EOF
-            cd /opt/django/calculation-of-categories
+            cd ${{ secrets.PROJECT_PATH }}
+            git pull ${{secrets.REPO_URL}}
             pipenv install --deploy
             pipenv run python manage.py migrate
             pipenv run python manage.py collectstatic --noinput
-            systemctl restart $rkp.target
+            systemctl restart rkp.target
